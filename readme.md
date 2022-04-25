@@ -1,3 +1,3 @@
 # Theme wordpress
 
-Basic theme for wordpress
+Branch based on a released theme, learn and test how it works
