@@ -194,27 +194,13 @@ final class subetuwebWP_Theme_Class {
 		require_once $dir . 'customizer/controls/typography/webfonts.php';
 		require_once $dir . 'walker/init.php';
 		require_once $dir . 'walker/menu-walker.php';
-		require_once $dir . 'third/class-gutenberg.php';
 		require_once $dir . 'third/class-elementor.php';
 		require_once $dir . 'third/class-beaver-themer.php';
 		require_once $dir . 'third/class-bbpress.php';
-		require_once $dir . 'third/class-buddypress.php';
-		require_once $dir . 'third/class-lifterlms.php';
-		require_once $dir . 'third/class-learndash.php';
 		require_once $dir . 'third/class-sensei.php';
-		require_once $dir . 'third/class-social-login.php';
 		require_once $dir . 'third/class-amp.php';
-		require_once $dir . 'third/class-pwa.php';
-
-		// WooCommerce.
-		if ( subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-			require_once $dir . 'woocommerce/woocommerce-config.php';
-		}
 
 		// Easy Digital Downloads.
-		if ( subetuwebWP_EDD_ACTIVE ) {
-			require_once $dir . 'edd/edd-config.php';
-		}
 
 	}
 
@@ -268,20 +254,9 @@ final class subetuwebWP_Theme_Class {
 	 */
 	public static function classes() {
 
-		// Admin only classes.
-		if ( is_admin() ) {
 
-			// Recommend plugins.
-			require_once subetuwebWP_INC_DIR . 'plugins/class-tgm-plugin-activation.php';
-			require_once subetuwebWP_INC_DIR . 'plugins/tgm-plugin-activation.php';
-
-			// Front-end classes.
-		} else {
-
-			// Breadcrumbs class.
-			require_once subetuwebWP_INC_DIR . 'breadcrumbs.php';
-
-		}
+		// Breadcrumbs class.
+		require_once subetuwebWP_INC_DIR . 'breadcrumbs.php';
 
 		// Customizer class.
 		require_once subetuwebWP_INC_DIR . 'customizer/library/customizer-custom-controls/functions.php';

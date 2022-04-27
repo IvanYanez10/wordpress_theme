@@ -22,13 +22,13 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 		 * @since 1.0
 		 */
 		public function __construct() {
-			add_action( 'customize_register',					array( $this, 'custom_controls' ) );
-			add_action( 'customize_register',					array( $this, 'controls_helpers' ) );
-			add_action( 'customize_register',					array( $this, 'customize_register' ), 11 );
-			add_action( 'after_setup_theme',					array( $this, 'register_options' ) );
+			add_action( 'customize_register',	array( $this, 'custom_controls' ) );
+			add_action( 'customize_register',	array( $this, 'controls_helpers' ) );
+			add_action( 'customize_register',	array( $this, 'customize_register' ), 11 );
+			add_action( 'after_setup_theme',	array( $this, 'register_options' ) );
 			add_action( 'customize_controls_print_footer_scripts', array( $this, 'customize_panel_init' ) );
-			add_action( 'customize_preview_init', 				array( $this, 'customize_preview_init' ) );
-			add_action( 'customize_controls_enqueue_scripts',   array( $this, 'custom_customize_enqueue' ), 7 );
+			add_action( 'customize_preview_init', array( $this, 'customize_preview_init' ) );
+			add_action( 'customize_controls_enqueue_scripts', array( $this, 'custom_customize_enqueue' ), 7 );
 			add_action( 'customize_controls_print_scripts', 'subetuweb_get_svg_icon' );
 			add_action( 'wp_ajax_subetuweb_update_search_box_light_mode', array( $this, 'update_search_box_light_Mode' ) );
 		}
@@ -109,38 +109,6 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 			// Move custom logo setting
 			$wp_customize->get_control( 'custom_logo' )->section 		= 'subetuweb_header_logo';
 
-            if ( ! function_exists( 'owp_fs' ) ) {
-                // Add our upsell section
-                if ( true != apply_filters( 'subetuwebwp_licence_tab_enable', false ) ) {
-
-                    // Get link
-                    $url = 'https://subetuwebwp.org/core-extensions-bundle/';
-
-                    // If affiliate ref
-                    $ref_url = '';
-                    $aff_ref = apply_filters( 'subetuweb_affiliate_ref', $ref_url );
-
-                    // Add & is has referal link
-                    if ( $aff_ref ) {
-                        $if_ref = '&';
-                    } else {
-                        $if_ref = '?';
-                    }
-
-                    // Add source
-                    $utm = $if_ref . 'utm_source=customizer&utm_campaign=bundle&utm_medium=wp-dash';
-
-                    $wp_customize->add_section( new subetuwebWP_Upsell_Section( $wp_customize, 'subetuwebwp_upsell_section', array(
-                        'title'    => esc_html__( 'Premium Addons Available', 'subetuwebwp' ),
-                        'url'      => $url . $aff_ref . $utm,
-                        'priority' => 0,
-						'backgroundcolor' => '#5277fe',
-						'textcolor' => '#fff',
-                    ) ) );
-
-                }
-            }
-
 		}
 
 		/**
@@ -182,26 +150,6 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 
 				}
 
-			}
-
-			// If WooCommerce is activated.
-			if ( subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-				require_once( $dir .'woocommerce.php' );
-			}
-
-			// Easy Digital Downloads Settings.
-			if ( subetuwebWP_EDD_ACTIVE ) {
-				require_once( $dir .'edd.php' );
-			}
-
-			// If LifterLMS is activated.
-			if ( subetuwebWP_LIFTERLMS_ACTIVE ) {
-				require_once( $dir .'lifterlms.php' );
-			}
-
-			// If LearnDash is activated.
-			if ( subetuwebWP_LEARNDASH_ACTIVE ) {
-				require_once( $dir .'learndash.php' );
 			}
 		}
 
