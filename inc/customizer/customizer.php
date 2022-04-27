@@ -22,13 +22,13 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 		 * @since 1.0
 		 */
 		public function __construct() {
-			add_action( 'customize_register',					array( $this, 'custom_controls' ) );
-			add_action( 'customize_register',					array( $this, 'controls_helpers' ) );
-			add_action( 'customize_register',					array( $this, 'customize_register' ), 11 );
-			add_action( 'after_setup_theme',					array( $this, 'register_options' ) );
+			add_action( 'customize_register',	array( $this, 'custom_controls' ) );
+			add_action( 'customize_register',	array( $this, 'controls_helpers' ) );
+			add_action( 'customize_register',	array( $this, 'customize_register' ), 11 );
+			add_action( 'after_setup_theme',	array( $this, 'register_options' ) );
 			add_action( 'customize_controls_print_footer_scripts', array( $this, 'customize_panel_init' ) );
-			add_action( 'customize_preview_init', 				array( $this, 'customize_preview_init' ) );
-			add_action( 'customize_controls_enqueue_scripts',   array( $this, 'custom_customize_enqueue' ), 7 );
+			add_action( 'customize_preview_init', array( $this, 'customize_preview_init' ) );
+			add_action( 'customize_controls_enqueue_scripts', array( $this, 'custom_customize_enqueue' ), 7 );
 			add_action( 'customize_controls_print_scripts', 'subetuweb_get_svg_icon' );
 			add_action( 'wp_ajax_subetuweb_update_search_box_light_mode', array( $this, 'update_search_box_light_Mode' ) );
 		}
@@ -102,44 +102,30 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 		public static function customize_register( $wp_customize ) {
 
 			// Tweak default controls
-			$wp_customize->get_setting( 'custom_logo' )->transport      = 'refresh';
-			$wp_customize->get_setting( 'blogname' )->transport 		= 'postMessage';
+			$wp_customize->get_setting( 'custom_logo' )->transport = 'refresh';
+			$wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
 			$wp_customize->get_setting( 'blogdescription' )->transport 	= 'postMessage';
 
 			// Move custom logo setting
-			$wp_customize->get_control( 'custom_logo' )->section 		= 'subetuweb_header_logo';
+			//$wp_customize->get_control( 'custom_logo' )->section 		= 'subetuweb_header_logo';
 
-            if ( ! function_exists( 'owp_fs' ) ) {
-                // Add our upsell section
-                if ( true != apply_filters( 'subetuwebwp_licence_tab_enable', false ) ) {
+			if ( ! function_exists( 'owp_fs' ) ) {
+					// Add our upsell section
+					if ( true != apply_filters( 'subetuwebwp_licence_tab_enable', false ) ) {
 
-                    // Get link
-                    $url = 'https://subetuwebwp.org/core-extensions-bundle/';
+							// Get link
+							$url = 'https://subetuwebwp.site';
 
-                    // If affiliate ref
-                    $ref_url = '';
-                    $aff_ref = apply_filters( 'subetuweb_affiliate_ref', $ref_url );
+							$wp_customize->add_section( new subetuwebWP_Upsell_Section( $wp_customize, 'subetuwebwp_upsell_section', array(
+								'title'    => esc_html__( 'Ver mas', 'subetuwebwp' ),
+								'url'      => $url,
+								'priority' => 0,
+								'backgroundcolor' => '#5277fe',
+								'textcolor' => '#fff',
+							) ) );
 
-                    // Add & is has referal link
-                    if ( $aff_ref ) {
-                        $if_ref = '&';
-                    } else {
-                        $if_ref = '?';
-                    }
-
-                    // Add source
-                    $utm = $if_ref . 'utm_source=customizer&utm_campaign=bundle&utm_medium=wp-dash';
-
-                    $wp_customize->add_section( new subetuwebWP_Upsell_Section( $wp_customize, 'subetuwebwp_upsell_section', array(
-                        'title'    => esc_html__( 'Premium Addons Available', 'subetuwebwp' ),
-                        'url'      => $url . $aff_ref . $utm,
-                        'priority' => 0,
-						'backgroundcolor' => '#5277fe',
-						'textcolor' => '#fff',
-                    ) ) );
-
-                }
-            }
+					}
+			}
 
 		}
 
@@ -235,26 +221,6 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 		 */
 		public function customize_preview_init() {
 			wp_enqueue_script( 'subetuwebwp-customize-preview', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/customize-preview.min.js', array( 'customize-preview' ), subetuwebWP_THEME_VERSION, true );
-
-			// If WooCommerce is activated.
-			if ( subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-				wp_enqueue_script( 'subetuwebwp-woo-customize-preview', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/woo-customize-preview.min.js', array( 'customize-preview' ), subetuwebWP_THEME_VERSION, true );
-			}
-
-			// Easy Digital Downloads Settings.
-			if ( subetuwebWP_EDD_ACTIVE ) {
-				wp_enqueue_script( 'subetuwebwp-edd-customize-preview', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/edd-customize-preview.min.js', array( 'customize-preview' ), subetuwebWP_THEME_VERSION, true );
-			}
-
-			// If LifterLMS is activated.
-			if ( subetuwebWP_LIFTERLMS_ACTIVE ) {
-				wp_enqueue_script( 'subetuwebwp-llms-customize-preview', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/llms-customize-preview.min.js', array( 'customize-preview' ), subetuwebWP_THEME_VERSION, true );
-			}
-
-			// If LearnDash is activated.
-			if ( subetuwebWP_LEARNDASH_ACTIVE ) {
-				wp_enqueue_script( 'subetuwebwp-ld-customize-preview', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/ld-customize-preview.min.js', array( 'customize-preview' ), subetuwebWP_THEME_VERSION, true );
-			}
 		}
 
 		/**
@@ -267,11 +233,6 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 			wp_enqueue_style( 'simple-line-icons', subetuwebWP_INC_DIR_URI .'customizer/assets/css/customizer-simple-line-icons.min.css', false, '2.4.0' );
 			wp_enqueue_style( 'subetuwebwp-general', subetuwebWP_INC_DIR_URI . 'customizer/assets/min/css/general.min.css' );
 			wp_enqueue_script( 'subetuwebwp-general', subetuwebWP_INC_DIR_URI . 'customizer/assets/min/js/general.min.js', array( 'jquery', 'customize-base' ), false, true );
-
-
-			if ( is_rtl() ) {
-				wp_enqueue_style( 'subetuwebwp-controls-rtl', subetuwebWP_INC_DIR_URI . 'customizer/assets/min/css/rtl.min.css' );
-			}
 		}
 
 	}
