@@ -1,15 +1,16 @@
 /*
+
 Theme Name: Subetuweb theme
 Theme URI: https://subetuweb.site/themeBasic
 Author: subetuweb
 Author URI: https://subetuweb.site/themes
-Description: First theme builded by code
+Description: Working with customize wordpress
 Requires at least: 5.9
 Tested up to: 5.9
 Requires PHP: 5.6
-Version: 1.1
+Version: 1.0.0
 Text Domain: Subetuweb
-Tags: one-column, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, rtl-language-support, sticky-post, threaded-comments
+Tags: one-column
 
 License: GNU General Public License v2.0 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +21,5 @@ License version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned
 with others.
-
-  DO NOT ADD YOUR CSS TO THIS FILE - IT WILL BE LOST
 
 */
