@@ -30,8 +30,6 @@ if ( ! function_exists( 'subetuwebwp_theme_strings' ) ) {
 
 				'owp-string-header-skip-link'            => apply_filters( 'subetuweb_header_skip_link', __( 'Skip to content', 'subetuwebwp' ) ),
 				'owp-string-search-text'                 => apply_filters( 'subetuweb_search_text', __( 'Search', 'subetuwebwp' ) ),
-				'owp-string-mobile-search-text'          => apply_filters( 'subetuweb_mobile_search_text', __( 'Search', 'subetuwebwp' ) ),
-				'owp-string-mobile-fs-search-text'       => apply_filters( 'subetuweb_mobile_fs_search_text', __( 'Type your search', 'subetuwebwp' ) ),
 				'owp-string-header-replace-search-text'  => apply_filters( 'subetuweb_header_replace_search_text', __( 'Type then hit enter to search...', 'subetuwebwp' ) ),
 				'owp-string-search-overlay-search-text'  => apply_filters( 'subetuweb_search_overlay_search_text', __( 'Type then hit enter to search', 'subetuwebwp' ) ),
 				'owp-string-vertical-header-search-text' => apply_filters( 'subetuweb_vertical_header_search_text', __( 'Search...', 'subetuwebwp' ) ),
@@ -45,7 +43,6 @@ if ( ! function_exists( 'subetuwebwp_theme_strings' ) ) {
 				'owp-string-comment-name'                => apply_filters( 'subetuweb_comment_name', __( 'Name', 'subetuwebwp' ) ),
 				'owp-string-comment-email'               => apply_filters( 'subetuweb_comment_email', __( 'Email', 'subetuwebwp' ) ),
 				'owp-string-comment-website'             => apply_filters( 'subetuweb_comment_website', __( 'Website', 'subetuwebwp' ) ),
-				'owp-string-search-continue-reading'     => apply_filters( 'subetuweb_search_continue_reading', __( 'Continue Reading', 'subetuwebwp' ) ),
 				'owp-string-post-continue-reading'       => apply_filters( 'subetuweb_post_continue_reading', __( 'Continue Reading', 'subetuwebwp' ) ),
 				'owp-string-single-related-posts'        => apply_filters( 'subetuweb_single_related_posts', __( 'You Might Also Like', 'subetuwebwp' ) ),
 				'owp-string-single-next-post'            => apply_filters( 'subetuweb_single_next_post', __( 'Next Post', 'subetuwebwp' ) ),
@@ -53,22 +50,8 @@ if ( ! function_exists( 'subetuwebwp_theme_strings' ) ) {
 				'owp-string-single-screen-reader-rm'     => apply_filters( 'subetuweb_single_screen_reader_rm', __( 'Read more articles', 'subetuwebwp' ) ),
 				'owp-string-author-page'                 => apply_filters( 'subetuweb_author_page', __( 'Visit author page', 'subetuwebwp' ) ),
 
-				// Woocommerce.
-				'owp-string-woo-quick-view-text'         => apply_filters( 'subetuweb_woo_quick_view_text', __( 'Quick View', 'subetuwebwp' ) ),
-				'owp-string-woo-quick-view-close'        => apply_filters( 'subetuweb_woo_quick_view_close', __( 'Close quick preview', 'subetuwebwp' ) ),
-				'owp-string-woo-floating-bar-select-btn' => apply_filters( 'subetuweb_woo_floating_bar_select_btn', __( 'Select Options', 'subetuwebwp' ) ),
-				'owp-string-woo-floating-bar-selected'   => apply_filters( 'subetuweb_woo_floating_bar_selected', __( 'Selected:', 'subetuwebwp' ) ),
-				'owp-string-woo-floating-bar-out-stock'  => apply_filters( 'subetuweb_woo_floating_bar_out_stock', __( 'Out of stock', 'subetuwebwp' ) ),
-				'owp-string-woo-nav-next-product'        => apply_filters( 'subetuweb_woo_nav_next_text', __( 'Next Product', 'subetuwebwp' ) ),
-				'owp-string-woo-nav-prev-product'        => apply_filters( 'subetuweb_woo_nav_prev_text', __( 'Previous Product', 'subetuwebwp' ) ),
-
 				// Aria.
 				'owp-string-close-mobile-menu'           => apply_filters( 'subetuweb_wai_close_mobile_menu', __( 'Close mobile menu', 'subetuwebwp' ) ),
-				'owp-string-mobile-search'               => apply_filters( 'subetuweb_wai_mobile_search', __( 'Search for:', 'subetuwebwp' ) ),
-				'owp-string-mobile-submit-search'        => apply_filters( 'subetuweb_wai_mobile_search_submit', __( 'Submit search', 'subetuwebwp' ) ),
-				'owp-string-search-field'                => apply_filters( 'subetuweb_wai_search_field', __( 'Insert search query', 'subetuwebwp' ) ),
-				'owp-string-search-form-label'           => apply_filters( 'subetuweb_wai_search_form_label', __( 'Search this website', 'subetuwebwp' ) ),
-				'owp-string-close-search-form'           => apply_filters( 'subetuweb_wai_close_search_form', __( 'Close this search form', 'subetuwebwp' ) ),
 				'owp-string-scroll-top'                  => apply_filters( 'subetuweb_wai_scroll_top', __( 'Scroll to the top of the page', 'subetuwebwp' ) ),
 				'owp-string-link-post-format'            => apply_filters( 'subetuweb_wai_link_post_format', __( 'Visit this link', 'subetuwebwp' ) ),
 				'owp-string-new-tab-alert'               => apply_filters( 'subetuweb_wai_new_tab_alert', __( 'Opens in a new tab', 'subetuwebwp' ) ),

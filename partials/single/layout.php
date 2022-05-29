@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <article id="post-<?php the_ID(); ?>">
-
+	to edit
 	<?php
 	// Get posts format.
 	$format = get_post_format();

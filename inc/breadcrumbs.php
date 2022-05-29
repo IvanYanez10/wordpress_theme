@@ -83,14 +83,6 @@ function sp_breadcrumbs_before() {
 add_action( 'seopress_breadcrumbs_before_html', 'sp_breadcrumbs_before' );
 
 /**
- * Div closed
- */
-function sp_breadcrumbs_after() {
-	echo '</div>';
-}
-add_action( 'seopress_breadcrumbs_after_html', 'sp_breadcrumbs_after' );
-
-/**
  * Add container to Rank Math breadcrumbs.
  *
  * @since  1.6.5
@@ -646,19 +638,6 @@ class subetuwebWP_Breadcrumb_Trail {
 				$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $page_id ) ), get_the_title( $page_id ) );
 			} else {
 				$this->add_post_terms( $post_id, $posts_tax );
-			}
-
-		}
-
-		// If the post type is 'product'.
-		else if ( 'product' === $post->post_type
-			&& 'none' != $products_tax ) {
-
-			if ( 'shop' == $products_tax ) {
-				$shop_id = wc_get_page_id( 'shop' );
-				$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $shop_id ) ), get_the_title( $shop_id ) );
-			} else {
-				$this->add_post_terms( $post_id, $products_tax );
 			}
 
 		}

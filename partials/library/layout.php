@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 } ?>
 
 <article class="single-library-article clr">
-
+	layout
 	<div class="entry clr"<?php subetuwebwp_schema_markup( 'entry_content' ); ?>>
 		<?php the_content(); ?>
 	</div>

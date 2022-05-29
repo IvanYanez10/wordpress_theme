@@ -1,0 +1,11 @@
+.bg-main{
+  margin: 0 50px;
+}
+
+.bg-main .name-brand::after{
+  text-align: center;
+}
+
+.bg-recent-post{
+  height: 350px;
+}

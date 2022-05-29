@@ -48,27 +48,6 @@ $heading = apply_filters( 'subetuweb_page_header_heading', $heading );
 
 	<?php do_action( 'subetuweb_before_page_header_inner' ); ?>
 
-	<div class="container clr page-header-inner">
-
-		<?php
-		// Return if page header is disabled.
-		if ( subetuwebwp_has_page_header_heading() ) {
-			?>
-
-			<<?php echo esc_attr( $heading ); ?> class="page-header-title clr"<?php subetuwebwp_schema_markup( 'headline' ); ?>><?php echo wp_kses_post( subetuwebwp_has_page_title() ); ?></<?php echo esc_attr( $heading ); ?>>
-
-			<?php get_template_part( 'partials/page-header-subheading' ); ?>
-
-		<?php } ?>
-
-		<?php
-		if ( function_exists( 'subetuwebwp_breadcrumb_trail' ) ) {
-			subetuwebwp_breadcrumb_trail();
-		}
-		?>
-
-	</div><!-- .page-header-inner -->
-
 	<?php subetuwebwp_page_header_overlay(); ?>
 
 	<?php do_action( 'subetuweb_after_page_header_inner' ); ?>

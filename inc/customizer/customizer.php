@@ -25,12 +25,11 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 			add_action( 'customize_register',	array( $this, 'custom_controls' ) );
 			add_action( 'customize_register',	array( $this, 'controls_helpers' ) );
 			add_action( 'customize_register',	array( $this, 'customize_register' ), 11 );
-			add_action( 'after_setup_theme',	array( $this, 'register_options' ) );
 			add_action( 'customize_controls_print_footer_scripts', array( $this, 'customize_panel_init' ) );
 			add_action( 'customize_preview_init', array( $this, 'customize_preview_init' ) );
 			add_action( 'customize_controls_enqueue_scripts', array( $this, 'custom_customize_enqueue' ), 7 );
-			add_action( 'customize_controls_print_scripts', 'subetuweb_get_svg_icon' );
-			add_action( 'wp_ajax_subetuweb_update_search_box_light_mode', array( $this, 'update_search_box_light_Mode' ) );
+			//add_action( 'customize_controls_print_scripts', 'subetuweb_get_svg_icon' );
+			//add_action( 'wp_ajax_subetuweb_update_search_box_light_mode', array( $this, 'update_search_box_light_Mode' ) );
 		}
 
 		/**
@@ -68,8 +67,6 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 			$wp_customize->register_control_type( 'subetuwebWP_Customizer_Sortable_Control' 		);
 			$wp_customize->register_control_type( 'subetuwebWP_Customizer_Text_Control' 			);
 			$wp_customize->register_control_type( 'subetuwebWP_Customizer_Textarea_Control' 		);
-			$wp_customize->register_control_type( 'subetuwebWP_Customizer_Typo_Control' 			);
-			$wp_customize->register_control_type( 'subetuwebWP_Customizer_Typography_Control' 		);
 
 		}
 
@@ -106,91 +103,7 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 			$wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
 			$wp_customize->get_setting( 'blogdescription' )->transport 	= 'postMessage';
 
-			// Move custom logo setting
-			//$wp_customize->get_control( 'custom_logo' )->section 		= 'subetuweb_header_logo';
-
-			if ( ! function_exists( 'owp_fs' ) ) {
-					// Add our upsell section
-					if ( true != apply_filters( 'subetuwebwp_licence_tab_enable', false ) ) {
-
-							// Get link
-							$url = 'https://subetuwebwp.site';
-
-							$wp_customize->add_section( new subetuwebWP_Upsell_Section( $wp_customize, 'subetuwebwp_upsell_section', array(
-								'title'    => esc_html__( 'Ver mas', 'subetuwebwp' ),
-								'url'      => $url,
-								'priority' => 0,
-								'backgroundcolor' => '#5277fe',
-								'textcolor' => '#fff',
-							) ) );
-
-					}
-			}
-
 		}
-
-		/**
-		 * Adds customizer options
-		 *
-		 * @since 1.0.0
-		 */
-		public function register_options() {
-			// Var
-			$dir = subetuwebWP_INC_DIR .'customizer/settings/';
-
-			// Customizer files array
-			$files = array(
-				'typography',
-				'general',
-				'blog',
-				'header',
-				'topbar',
-				'footer-widgets',
-				'footer-bottom',
-				'sidebar',
-			);
-
-			foreach ( $files as $key ) {
-
-				$setting = str_replace( '-', '_', $key );
-
-				// If subetuweb Extra is activated
-				if ( subetuweb_EXTRA_ACTIVE
-					&& class_exists( 'subetuweb_Extra_Theme_Panel' ) ) {
-
-					if ( subetuweb_Extra_Theme_Panel::get_setting( 'oe_'. $setting .'_panel' ) ) {
-						require_once( $dir . $key .'.php' );
-					}
-
-				} else {
-
-					require_once( $dir . $key .'.php' );
-
-				}
-
-			}
-
-			// If WooCommerce is activated.
-			if ( subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-				require_once( $dir .'woocommerce.php' );
-			}
-
-			// Easy Digital Downloads Settings.
-			if ( subetuwebWP_EDD_ACTIVE ) {
-				require_once( $dir .'edd.php' );
-			}
-
-			// If LifterLMS is activated.
-			if ( subetuwebWP_LIFTERLMS_ACTIVE ) {
-				require_once( $dir .'lifterlms.php' );
-			}
-
-			// If LearnDash is activated.
-			if ( subetuwebWP_LEARNDASH_ACTIVE ) {
-				require_once( $dir .'learndash.php' );
-			}
-		}
-
 
 		/**
 		 * Loads Css files for customizer Panel
@@ -200,15 +113,6 @@ if ( ! class_exists( 'subetuwebWP_Customizer' ) ) :
 		public function customize_panel_init() {
 
 			$settings = wp_parse_args( get_option( 'oe_panels_settings', [] ) );
-
-			if ( isset( $settings['customizer-search'] ) && (bool) $settings['customizer-search'] === true ) {
-				wp_enqueue_script( 'subetuwebwp-customize-search-js', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/customize-search.js', array( 'lodash', 'wp-i18n', 'wp-util' ) );
-				wp_enqueue_style( 'subetuwebwp-customize-search', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/customize-search.css' );
-				wp_localize_script( 'subetuwebwp-customize-search-js', 'subetuwebCustomizerSearchOptions', [
-					'darkMode' => get_option( 'subetuwebCustomizerSearchdarkMode', false )
-				] );
-			}
-
 
 			wp_enqueue_script( 'subetuwebwp-customize-js', subetuwebWP_INC_DIR_URI . 'customizer/assets/js/customize.js', array( 'jquery' ) );
 			wp_enqueue_style( 'subetuwebwp-customize-preview', subetuwebWP_INC_DIR_URI . 'customizer/assets/css/customize-preview.min.css');

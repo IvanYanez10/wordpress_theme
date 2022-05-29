@@ -14,26 +14,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <footer id="footer" class="<?php echo esc_attr( subetuwebwp_footer_classes() ); ?>"<?php subetuwebwp_schema_markup( 'footer' ); ?> role="contentinfo">
 
-	<?php do_action( 'subetuweb_before_footer_inner' ); ?>
+	<div id="copyright" class="clr text-center text-muted" role="contentinfo">
+		soporte 24/7
+		contacto@subetuweb.site
+		5541122122
+	</div>
 
-	<div id="footer-inner" class="clr">
+	<div class="row">
+		<div class=col>
+			<img src="" alt="logo">
+			<ul>
+				<li>f</li>
+				<li>in</li>
+				<li>-</li>
+			</ul>
+		</div>
+		<div class=col>
+			<h5>Servicios</h5>
+			<ul>
+				<li>f</li>
+				<li>in</li>
+				<li>-</li>
+			</ul>
+		</div>
+		<div class=col>
+			<h5>Navegacion</h5>
+			<ul>
+				<li>f</li>
+				<li>in</li>
+				<li>-</li>
+			</ul>
+		</div>
+	</div>
 
-		<?php
-
-		// Display the footer widgets if enabled.
-		if ( subetuwebwp_display_footer_widgets() ) {
-			get_template_part( 'partials/footer/widgets' );
-		}
-
-		// Display the footer bottom if enabled.
-		if ( subetuwebwp_display_footer_bottom() ) {
-			get_template_part( 'partials/footer/copyright' );
-		}
-
-		?>
-
-	</div><!-- #footer-inner -->
-
-	<?php do_action( 'subetuweb_after_footer_inner' ); ?>
-
-</footer><!-- #footer -->
+</footer>
+<!-- end-footer -->

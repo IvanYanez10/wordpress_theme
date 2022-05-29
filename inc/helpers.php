@@ -74,22 +74,11 @@ if ( ! function_exists( 'subetuwebwp_body_classes' ) ) {
 		$post_id      = subetuwebwp_post_id();
 		$mobile_style = subetuwebwp_mobile_menu_style();
 
-		// RTL.
-		if ( is_rtl() ) {
-			$classes[] = 'rtl';
-		}
-
 		// Main class.
 		$classes[] = 'subetuwebwp-theme';
 
 		// Mobile menu style.
 		$classes[] = $mobile_style . '-mobile';
-
-		// If video header.
-		if ( function_exists( 'has_header_video' )
-			&& has_header_video() ) {
-			$classes[] = 'has-header-video';
-		}
 
 		// Boxed layout.
 		if ( 'boxed' == $layout_style ) {
@@ -265,65 +254,6 @@ if ( ! function_exists( 'subetuwebwp_body_classes' ) ) {
 			$classes[] = 'pagination-' . $pagination_align;
 		}
 
-		// If WooCommerce is active.
-		if ( subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-
-			// If grid/list buttons.
-			if ( get_theme_mod( 'subetuweb_woo_grid_list', true ) ) {
-				$classes[] = 'has-grid-list';
-			}
-
-			// Tabs position.
-			$woo_tabs = get_theme_mod( 'subetuweb_woo_product_meta_tabs_position', 'center' );
-			if ( subetuwebwp_is_woo_single()
-				&& 'center' != $woo_tabs ) {
-				$classes[] = 'woo-' . $woo_tabs . '-tabs';
-			}
-
-			// If shop conditional.
-			if ( true === get_theme_mod( 'subetuweb_shop_conditional', false ) ) {
-				$classes[] = 'has-woo-shop-conditional';
-
-				// If shop conditional message.
-				if ( 'yes' === get_theme_mod( 'subetuweb_shop_cond_msg', 'yes' ) ) {
-
-					// If My Account page linked to conditional message.
-					if ( true === get_theme_mod( 'subetuweb_shop_add_myaccount_link', false ) ) {
-						$classes[] = 'has-woo-shop-cond-msg-myaccount';
-					} else {
-						$classes[] = 'has-woo-shop-cond-msg';
-					}
-				}
-			}
-
-			// If has disabled image and product archive links.
-			if ( true === get_theme_mod( 'subetuweb_shop_woo_disable_links', false ) ) {
-
-				// If disable image and links conditional.
-				if ( 'yes' === get_theme_mod( 'subetuweb_shop_woo_disable_links_cond', 'no' ) ) {
-					$classes[] = 'has-woo-shop-links-disabled-cond';
-				} else {
-					$classes[] = 'has-woo-shop-links-disabled-all';
-				}
-			}
-
-			// If has sinlge product conditional.
-			if ( true === get_theme_mod( 'subetuweb_woo_single_conditional', false ) ) {
-				$classes[] = 'has-woo-single-conditional';
-
-				// If single conditional message.
-				if ( 'yes' === get_theme_mod( 'subetuweb_woo_single_cond_msg', 'yes' ) ) {
-
-					// If My Account page linked to conditional message.
-					if ( true === get_theme_mod( 'subetuweb_single_add_myaccount_link', false ) ) {
-						$classes[] = 'has-woo-single-cond-msg-myaccount';
-					} else {
-						$classes[] = 'has-woo-single-cond-msg';
-					}
-				}
-			}
-		}
-
 		/**
 		 * Performance Section
 		 */
@@ -430,14 +360,6 @@ if ( ! function_exists( 'subetuwebwp_post_id' ) ) {
 			$id = get_the_ID();
 		}
 
-		// Get ID of WooCommerce product archive.
-		elseif ( subetuwebWP_WOOCOMMERCE_ACTIVE && is_shop() ) {
-			$shop_id = wc_get_page_id( 'shop' );
-			if ( isset( $shop_id ) ) {
-				$id = $shop_id;
-			}
-		}
-
 		// Posts page.
 		elseif ( is_home() && $page_for_posts = get_option( 'page_for_posts' ) ) {
 			$id = $page_for_posts;
@@ -528,17 +450,6 @@ if ( ! function_exists( 'subetuwebwp_post_layout' ) ) {
 			$class = get_theme_mod( 'subetuweb_blog_single_layout', 'right-sidebar' );
 		}
 
-		// Library and Elementor template
-		elseif ( is_singular( 'subetuwebwp_library' )
-				|| is_singular( 'elementor_library' ) ) {
-			$class = 'full-width';
-		}
-
-		// Search
-		elseif ( is_search() ) {
-			$class = get_theme_mod( 'subetuweb_search_layout', 'right-sidebar' );
-		}
-
 		// 404 page
 		elseif ( is_404() ) {
 			$class = get_theme_mod( 'subetuweb_error_page_layout', 'full-width' );
@@ -556,223 +467,6 @@ if ( ! function_exists( 'subetuwebwp_post_layout' ) ) {
 
 		// Apply filters and return
 		return apply_filters( 'subetuweb_post_layout_class', $class );
-
-	}
-}
-
-/**
- * Returns correct both sidebars style layout
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_both_sidebars_style' ) ) {
-
-	function subetuwebwp_both_sidebars_style() {
-
-		// Meta
-		$meta = get_post_meta( subetuwebwp_post_id(), 'subetuweb_both_sidebars_style', true );
-
-		// Check meta first to override and return (prevents filters from overriding meta)
-		if ( $meta ) {
-			return $meta;
-		}
-
-		// Singular Page
-		if ( is_page() ) {
-			$class = get_theme_mod( 'subetuweb_page_single_both_sidebars_style', 'scs-style' );
-		}
-
-		// Home
-		elseif ( is_home()
-			|| is_category()
-			|| is_tag()
-			|| is_date()
-			|| is_author() ) {
-			$class = get_theme_mod( 'subetuweb_blog_archives_both_sidebars_style', 'scs-style' );
-		}
-
-		// Singular Post
-		elseif ( is_singular( 'post' ) ) {
-			$class = get_theme_mod( 'subetuweb_blog_single_both_sidebars_style', 'scs-style' );
-		}
-
-		// Search
-		elseif ( is_search() ) {
-			$class = get_theme_mod( 'subetuweb_search_both_sidebars_style', 'scs-style' );
-		}
-
-		// All else
-		else {
-			$class = 'scs-style';
-		}
-
-		// Class should never be empty
-		if ( empty( $class ) ) {
-			$class = 'scs-style';
-		}
-
-		// Apply filters and return
-		return apply_filters( 'subetuweb_both_sidebars_style', $class );
-
-	}
-}
-
-/**
- * Mobile sidebar order
- *
- * @since 1.6
- */
-if ( ! function_exists( 'subetuwebwp_sidebar_order' ) ) {
-
-	function subetuwebwp_sidebar_order() {
-
-		// Define variables
-		$order = 'content-sidebar';
-		/*
-		$meta   = get_post_meta( subetuwebwp_post_id(), 'subetuweb_post_layout', true );
-
-		// Check meta first to override and return (prevents filters from overriding meta)
-		if ( $meta ) {
-			return $meta;
-		}*/
-
-		// Singular Page
-		if ( is_page() ) {
-			$order = get_theme_mod( 'subetuweb_page_single_sidebar_order', 'content-sidebar' );
-		}
-
-		// Home
-		elseif ( is_home()
-			|| is_category()
-			|| is_tag()
-			|| is_date()
-			|| is_author() ) {
-			$order = get_theme_mod( 'subetuweb_blog_archives_sidebar_order', 'content-sidebar' );
-		}
-
-		// Singular Post
-		elseif ( is_singular( 'post' ) ) {
-			$order = get_theme_mod( 'subetuweb_single_post_sidebar_order', 'content-sidebar' );
-		}
-
-		// Search
-		elseif ( is_search() ) {
-			$order = get_theme_mod( 'subetuweb_search_sidebar_order', 'content-sidebar' );
-		}
-
-		// All else
-		else {
-			$order = 'content-sidebar';
-		}
-
-		// The order should never be empty
-		if ( empty( $order ) ) {
-			$order = 'content-sidebar';
-		}
-
-		// Apply filters and return
-		return apply_filters( 'subetuweb_sidebar_order', $order );
-
-	}
-}
-
-/**
- * Get the sidebar
- *
- * @since  1.4.0
- */
-if ( ! function_exists( 'subetuwebwp_display_sidebar' ) ) {
-
-	function subetuwebwp_display_sidebar() {
-
-		// Retunr if full width or full screen
-		if ( in_array( subetuwebwp_post_layout(), array( 'full-screen', 'full-width' ) ) ) {
-			return;
-		}
-
-		// Add the second sidebar
-		if ( 'both-sidebars' == subetuwebwp_post_layout() ) {
-			get_sidebar( 'left' );
-		}
-
-		// Add the default sidebar
-		get_sidebar();
-
-	}
-}
-
-/**
- * Returns the sidebar
- *
- * @since  1.6
- */
-if ( ! function_exists( 'subetuwebwp_sidebar_action' ) ) {
-
-	function subetuwebwp_sidebar_action() {
-
-		if ( 'sidebar-content' == subetuwebwp_sidebar_order()
-			&& 'both-sidebars' != subetuwebwp_post_layout() ) {
-			$action = 'subetuweb_before_primary';
-		} else {
-			$action = 'subetuweb_after_primary';
-		}
-
-		add_action( $action, 'subetuwebwp_display_sidebar' );
-
-	}
-
-	add_action( 'wp', 'subetuwebwp_sidebar_action', 20 );
-
-}
-
-/**
- * Returns the correct sidebar ID
- *
- * @since  1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_get_sidebar' ) ) {
-
-	function subetuwebwp_get_sidebar( $sidebar = 'sidebar' ) {
-
-		// Search
-		if ( is_search()
-			&& true == get_theme_mod( 'subetuweb_search_custom_sidebar', true ) ) {
-			$sidebar = 'search_sidebar';
-		}
-
-		// Add filter for tweaking the sidebar display via child theme's
-		$sidebar = apply_filters( 'subetuweb_get_sidebar', $sidebar );
-
-		// Never show empty sidebar
-		if ( ! is_active_sidebar( $sidebar ) ) {
-			$sidebar = 'sidebar';
-		}
-
-		// Return the correct sidebar
-		return $sidebar;
-
-	}
-}
-
-/**
- * Returns the correct second sidebar ID
- *
- * @since  1.4.0
- */
-if ( ! function_exists( 'subetuwebwp_get_second_sidebar' ) ) {
-
-	function subetuwebwp_get_second_sidebar( $sidebar = 'sidebar-2' ) {
-
-		// Add filter for tweaking the left sidebar display via child theme's
-		$sidebar = apply_filters( 'subetuweb_get_second_sidebar', $sidebar );
-
-		// Never show empty sidebar
-		if ( ! is_active_sidebar( $sidebar ) ) {
-			$sidebar = 'sidebar-2';
-		}
-
-		// Return the correct sidebar
-		return $sidebar;
 
 	}
 }
@@ -1289,261 +983,6 @@ if ( ! function_exists( 'subetuwebwp_header_logo_setting' ) ) {
 }
 
 /**
- * Returns retina logo setting
- *
- * @since 1.1.2
- */
-if ( ! function_exists( 'subetuwebwp_header_retina_logo_setting' ) ) {
-
-	function subetuwebwp_header_retina_logo_setting() {
-
-		// Get setting
-		$setting = get_theme_mod( 'subetuweb_retina_logo' );
-
-		// Return setting
-		return apply_filters( 'subetuweb_retina_logo', $setting );
-
-	}
-}
-
-/**
- * Add srcset for retina header logo
- *
- * @since 1.1.1
- */
-if ( ! function_exists( 'subetuwebwp_header_retina_logo' ) ) {
-
-	function subetuwebwp_header_retina_logo( $attr, $attachment, $size ) {
-
-		$attr['srcset'] = '';
-
-		// Get logo
-		$custom_logo = subetuwebwp_header_logo_setting();
-
-		if ( (int) $custom_logo === $attachment->ID ) {
-
-				// Logo data
-				$logo_data = array(
-					'url'    => '',
-					'width'  => '',
-					'height' => '',
-					'alt'    => '',
-				);
-
-				if ( ! is_customize_preview() ) {
-					$logo_attachment_data = subetuwebwp_get_attachment_data_from_url( $logo_data['url'] );
-
-					if ( isset( $logo_attachment_data[0] ) ) {
-						$attr['src'] = $logo_attachment_data[0];
-					}
-				}
-
-				// Get file type.
-				$file_type = wp_check_filetype( $attr['src'] );
-				$file_ext  = $file_type['ext'];
-
-				if ( 'svg' === $file_ext ) {
-					$attr['width']    = '100%';
-					$attr['height']   = '100%';
-					$logo_has_classes = isset( $attr['class'] ) ? $attr['class'] : '';
-					$attr['class']    = $logo_has_classes . ' subetuwebwp-logo-svg';
-				}
-
-				// Get retina logo
-				$retina_logo = subetuwebwp_header_retina_logo_setting();
-
-				if ( $retina_logo ) {
-
-					$cutom_logo_src = wp_get_attachment_image_src( $custom_logo, 'full' );
-					$cutom_logo_url = $cutom_logo_src[0];
-
-					$attr['srcset'] = $cutom_logo_url . ' 1x, ' . $retina_logo . ' 2x';
-
-				}
-		}
-
-		// Return attr
-		return $attr;
-
-	}
-}
-
-/**
- * Returns full screen header logo
- *
- * @since 1.0.4
- */
-if ( ! function_exists( 'subetuwebwp_header_full_screen_logo' ) ) {
-
-	function subetuwebwp_header_full_screen_logo() {
-
-		// Return false if disabled
-		if ( 'full_screen' != subetuwebwp_header_style() ) {
-			return false;
-		}
-
-		$html = '';
-
-		// Get logo
-		$logo_url   = get_theme_mod( 'subetuweb_full_screen_header_logo' );
-		$retina_url = get_theme_mod( 'subetuweb_full_screen_header_retina_logo' );
-		$srcset     = '';
-
-		// Logo data
-		$logo_data = array(
-			'url'    => '',
-			'width'  => '',
-			'height' => '',
-			'alt'    => '',
-		);
-
-		if ( $logo_url ) {
-
-			// Logo url
-			$logo_data['url'] = $logo_url;
-
-			// Logo data
-			$logo_attachment_data = subetuwebwp_get_attachment_data_from_url( $logo_url );
-
-			// Get logo data
-			if ( $logo_attachment_data ) {
-				$logo_data['width']  = $logo_attachment_data['width'];
-				$logo_data['height'] = $logo_attachment_data['height'];
-				$logo_data['alt']    = $logo_attachment_data['alt'];
-			}
-
-			// Add srcset attr
-			if ( $retina_url ) {
-				$srcset = $logo_url . ' 1x, ' . $retina_url . ' 2x';
-				$srcset = 'srcset="' . $srcset . '"';
-			}
-
-			// Output image
-			$html = sprintf(
-				'<a href="%1$s" class="full-screen-logo-link" rel="home"' . subetuwebwp_get_schema_markup( 'url' ) . '><img src="%2$s" class="full-screen-logo" width="%3$s" height="%4$s" alt="%5$s" %6$s /></a>',
-				esc_url( home_url( '/' ) ),
-				esc_url( $logo_data['url'] ),
-				esc_attr( $logo_data['width'] ),
-				esc_attr( $logo_data['height'] ),
-				esc_attr( $logo_data['alt'] ),
-				$srcset
-			);
-
-		}
-
-		// Return logo
-		return apply_filters( 'subetuweb_full_screen_header_logo', $html );
-
-	}
-}
-
-/**
- * Echo full_screen header logo
- *
- * @since 1.1.1
- */
-if ( ! function_exists( 'subetuwebwp_custom_full_screen_logo' ) ) {
-
-	function subetuwebwp_custom_full_screen_logo() {
-		echo subetuwebwp_header_full_screen_logo();
-	}
-}
-
-/**
- * Returns responsive header logo
- *
- * @since 1.4.0
- */
-if ( ! function_exists( 'subetuwebwp_header_responsive_logo' ) ) {
-
-	function subetuwebwp_header_responsive_logo() {
-
-		$html = '';
-
-		// Get logo
-		$logo_url = get_theme_mod( 'subetuweb_responsive_logo' );
-
-		// Logo data
-		$logo_data = array(
-			'url'    => '',
-			'width'  => '',
-			'height' => '',
-			'alt'    => '',
-		);
-
-		if ( $logo_url ) {
-
-			// Logo url
-			$logo_data['url'] = $logo_url;
-
-			// Logo data
-			$logo_attachment_data = subetuwebwp_get_attachment_data_from_url( $logo_url );
-
-			// Get logo data
-			if ( $logo_attachment_data ) {
-				$logo_data['width']  = $logo_attachment_data['width'];
-				$logo_data['height'] = $logo_attachment_data['height'];
-				$logo_data['alt']    = $logo_attachment_data['alt'];
-			}
-
-			// Output image
-			$html = sprintf(
-				'<a href="%1$s" class="responsive-logo-link" rel="home"' . subetuwebwp_get_schema_markup( 'url' ) . '><img src="%2$s" class="responsive-logo" width="%3$s" height="%4$s" alt="%5$s" /></a>',
-				esc_url( home_url( '/' ) ),
-				esc_url( $logo_data['url'] ),
-				esc_attr( $logo_data['width'] ),
-				esc_attr( $logo_data['height'] ),
-				esc_attr( $logo_data['alt'] )
-			);
-
-		}
-
-		// Return logo
-		return apply_filters( 'subetuweb_responsive_logo', $html );
-
-	}
-}
-
-/**
- * Echo responsive header logo
- *
- * @since 1.4.0
- */
-if ( ! function_exists( 'subetuwebwp_custom_responsive_logo' ) ) {
-
-	function subetuwebwp_custom_responsive_logo() {
-		echo wp_kses_post( subetuwebwp_header_responsive_logo() );
-	}
-}
-
-/**
- * Returns social sharing template part
- */
-if ( ! function_exists( 'subetuwebwp_medium_header_elements' ) ) {
-
-	function subetuwebwp_medium_header_elements() {
-
-		// Default array
-		$array = array( 'searchfrom', 'logo', 'social' );
-
-		// Get array from Customizer
-		$array = get_theme_mod( 'subetuweb_medium_header_top_header_elements', $array );
-
-		// Turn into array if string
-		if ( $array && ! is_array( $array ) ) {
-			$array = explode( ',', $array );
-		}
-
-		// Apply filters for easy modification
-		$array = apply_filters( 'subetuweb_medium_header_elements_filter', $array );
-
-		// Return array
-		return $array;
-
-	}
-}
-
-/**
  * Display content after header
  *
  * @since 1.5.0
@@ -1774,210 +1213,6 @@ if ( ! function_exists( 'subetuwebwp_header_logo_classes' ) ) {
 }
 
 /**
- * Returns menu search style
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_menu_search_style' ) ) {
-
-	function subetuwebwp_menu_search_style() {
-
-		// Get search style from Customizer
-		$style = get_theme_mod( 'subetuweb_menu_search_style', 'drop_down' );
-
-		// Apply filters for advanced edits
-		$style = apply_filters( 'subetuweb_menu_search_style', $style );
-
-		// Sanitize output so it's not empty and return
-		$style = $style ? $style : 'drop_down';
-
-		// Return style
-		return $style;
-
-	}
-}
-
-/**
- * Returns mobile menu search style
- *
- * @since 3.0.0
- */
-if ( ! function_exists( 'subetuwebwp_mobile_menu_search_style' ) ) {
-
-	function subetuwebwp_mobile_menu_search_style() {
-
-		// Get search style from Customizer
-		$style = get_theme_mod( 'subetuweb_mobile_menu_search_style', 'disabled' );
-
-		// Apply filters for advanced edits
-		$style = apply_filters( 'subetuwebwp_mobile_menu_search_style', $style );
-
-		// Sanitize output so it's not empty and return
-		$style = $style ? $style : 'disabled';
-
-		// Return style
-		return $style;
-
-	}
-}
-
-/**
- * Adds the search icon to the menu items
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_add_search_to_menu' ) ) {
-
-	function subetuwebwp_add_search_to_menu( $items, $args ) {
-
-		// Only used on main menu
-		if ( 'main_menu' != $args->theme_location ) {
-			return $items;
-		}
-
-		// Get search style
-		$search_style = subetuwebwp_menu_search_style();
-		$header_style = subetuwebwp_header_style();
-
-		// Return if disabled
-		if ( ! $search_style
-			|| 'disabled' == $search_style
-			|| 'top' == $header_style
-			|| 'vertical' == $header_style ) {
-			return $items;
-		}
-
-		// Get correct search icon class
-		if ( 'drop_down' == $search_style ) {
-			$class = ' search-dropdown-toggle';
-		} elseif ( 'header_replace' == $search_style ) {
-			$class = ' search-header-replace-toggle';
-		} elseif ( 'overlay' == $search_style ) {
-			$class = ' search-overlay-toggle';
-		} else {
-			$class = '';
-		}
-
-		// Add search item to menu.
-		$items .= '<li class="search-toggle-li" ' . apply_filters( 'subetuwebwp_attrs_nav_search_bar', '' ) . '>';
-		if ( 'full_screen' == $header_style ) {
-			$items     .= '<form method="get" action="' . esc_url( home_url( '/' ) ) . '" class="header-searchform">';
-				$items .= '<input type="search" name="s" value="" autocomplete="off" />';
-				// If the headerSearchForm script is not disable
-			if ( subetuweb_EXTRA_ACTIVE
-					&& class_exists( 'subetuweb_Extra_Scripts_Panel' )
-					&& subetuweb_Extra_Scripts_Panel::get_setting( 'oe_headerSearchForm_script' ) ) {
-				$items .= '<label>' . esc_html__( 'Type your search', 'subetuwebwp' ) . '<span><i></i><i></i><i></i></span></label>';
-			}
-			if ( ! function_exists( 'is_plugin_active' ) ) {
-				include_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-			if ( is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' ) ) {
-				$my_current_lang = apply_filters( 'wpml_current_language', null );
-				if ( ! empty( $my_current_lang ) ) {
-					$items .= '<input type="hidden" name="lang" value="' . $my_current_lang . '"/>';
-				}
-			}
-				$items .= '</form>';
-		} else {
-
-			$items     .= '<a href="javascript:void(0)" class="site-search-toggle' . $class . '" aria-label="' . esc_attr( 'Search website', 'subetuwebwp' ) . '">';
-				$items .= subetuwebwp_icon( 'search', false );
-			$items     .= '</a>';
-		}
-		$items .= '</li>';
-
-		// Return nav $items.
-		return $items;
-
-	}
-
-	add_filter( 'wp_nav_menu_items', 'subetuwebwp_add_search_to_menu', 11, 2 );
-
-}
-
-/**
- * Outputs the search for the top header style
- *
- * @since 1.0.2
- */
-if ( ! function_exists( 'subetuwebwp_top_header_search' ) ) {
-
-	function subetuwebwp_top_header_search() {
-
-		// Get header & search style
-		$search_style = subetuwebwp_menu_search_style();
-
-		// Return if disabled
-		if ( 'top' != subetuwebwp_header_style()
-			|| ! $search_style
-			|| 'disabled' == $search_style ) {
-			return;
-		}
-
-		// Get correct search icon class.
-		if ( 'drop_down' == $search_style ) {
-			$class = ' search-dropdown-toggle';
-		} elseif ( 'header_replace' == $search_style ) {
-			$class = ' search-header-replace-toggle';
-		} elseif ( 'overlay' == $search_style ) {
-			$class = ' search-overlay-toggle';
-		} else {
-			$class = '';
-		}
-
-		// Add search item to menu.
-		echo '<div id="search-toggle">';
-			echo '<a href="javascript:void(0)" class="site-search-toggle' . esc_attr( $class ) . '" aria-label="' . esc_attr__( 'Search website', 'subetuwebwp' ) . '">';
-				subetuwebwp_icon( 'search' );
-			echo '</a>';
-		echo '</div>';
-
-	}
-}
-
-/**
- * Returns header search style
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_menu_cart_style' ) ) {
-
-	function subetuwebwp_menu_cart_style() {
-
-		// Return if WooCommerce isn't enabled or icon is disabled
-		if ( ! subetuwebWP_WOOCOMMERCE_ACTIVE
-			|| 'disabled' == get_theme_mod( 'subetuweb_woo_menu_icon_visibility', 'default' )
-			|| 'disabled_desktop' == get_theme_mod( 'subetuweb_woo_menu_icon_visibility', 'default' )
-			|| 'disabled' == get_theme_mod( 'subetuweb_woo_menu_icon_display', 'icon_count' ) ) {
-			return;
-		}
-
-		// Get Menu Icon Style
-		$style = get_theme_mod( 'subetuweb_woo_menu_icon_style', 'drop_down' );
-
-		// Return click style for these pages
-		if ( is_cart()
-			|| is_checkout() ) {
-			$style = 'custom_link';
-		}
-
-		// Apply filters for advanced edits
-		$style = apply_filters( 'subetuweb_menu_cart_style', $style );
-
-		// Sanitize output so it's not empty
-		if ( 'drop_down' == $style
-			|| ! $style ) {
-			$style = 'drop_down';
-		}
-
-		// Return style
-		return $style;
-
-	}
-}
-
-/**
  * Mobile menu style
  *
  * @since 1.3.0
@@ -2188,13 +1423,6 @@ if ( ! function_exists( 'subetuwebwp_has_page_title' ) ) {
 
 			$title = esc_html__( '404: Page Not Found', 'subetuwebwp' );
 
-		}
-
-		// Fix for WooCommerce My Accounts pages
-		elseif ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url() ) {
-			$endpoint       = WC()->query->get_current_endpoint();
-			$endpoint_title = WC()->query->get_endpoint_title( $endpoint );
-			$title          = $endpoint_title ? $endpoint_title : $title;
 		}
 
 		// Anything else with a post_id defined
@@ -2894,22 +2122,6 @@ if ( ! function_exists( 'subetuwebwp_gallery_count' ) ) {
 }
 
 /**
- * Check if lightbox is enabled
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_gallery_is_lightbox_enabled' ) ) {
-
-	function subetuwebwp_gallery_is_lightbox_enabled() {
-
-		if ( 'on' == get_post_meta( get_the_ID(), 'subetuweb_gallery_link_images', true ) ) {
-			return true;
-		}
-
-	}
-}
-
-/**
  * Returns post media
  *
  * @since 1.0.0
@@ -3474,47 +2686,6 @@ if ( ! function_exists( 'subetuwebwp_pagejump' ) ) {
 }
 
 /**
- * Infinite Scroll Pagination
- *
- * @since 1.0.4
- */
-if ( ! function_exists( 'subetuwebwp_infinite_scroll' ) ) {
-
-	function subetuwebwp_infinite_scroll( $type = 'standard' ) {
-
-		// Last text
-		$last = get_theme_mod( 'subetuweb_blog_infinite_scroll_last_text' );
-		$last = subetuwebwp_tm_translation( 'subetuweb_blog_infinite_scroll_last_text', $last );
-		$last = $last ? $last : esc_html__( 'End of content', 'subetuwebwp' );
-
-		// Error text
-		$error = get_theme_mod( 'subetuweb_blog_infinite_scroll_error_text' );
-		$error = subetuwebwp_tm_translation( 'subetuweb_blog_infinite_scroll_error_text', $error );
-		$error = $error ? $error : esc_html__( 'No more pages to load', 'subetuwebwp' );
-
-		// Output pagination HTML
-		$output          = '';
-		$output         .= '<div class="scroller-status">';
-			$output     .= '<div class="loader-ellips infinite-scroll-request">';
-				$output .= '<span class="loader-ellips__dot"></span>';
-				$output .= '<span class="loader-ellips__dot"></span>';
-				$output .= '<span class="loader-ellips__dot"></span>';
-				$output .= '<span class="loader-ellips__dot"></span>';
-			$output     .= '</div>';
-			$output     .= '<p class="scroller-status__message infinite-scroll-last">' . $last . '</p>';
-			$output     .= '<p class="scroller-status__message infinite-scroll-error">' . $error . '</p>';
-		$output         .= '</div>';
-		$output         .= '<div class="infinite-scroll-nav clr">';
-			$output     .= '<div class="alignleft newer-posts">' . get_previous_posts_link( '<span aria-hidden="true">&larr;</span> ' . esc_attr__( 'Newer Posts', 'subetuwebwp' ) ) . '</div>';
-			$output     .= '<div class="alignright older-posts">' . get_next_posts_link( esc_attr__( 'Older Posts', 'subetuwebwp' ) . ' <span aria-hidden="true">&rarr;</span>' ) . '</div>';
-		$output         .= '</div>';
-
-		echo wp_kses_post( $output );
-
-	}
-}
-
-/**
  * Blog Pagination
  * Used to load the correct pagination function for blog archives
  * Execute the correct pagination function based on the theme settings
@@ -3633,29 +2804,6 @@ if ( ! function_exists( 'subetuwebwp_excerpt' ) ) {
 /*-------------------------------------------------------------------------------*/
 
 /**
- * Display footer widgets
- *
- * @since 1.1.2
- */
-if ( ! function_exists( 'subetuwebwp_display_footer_widgets' ) ) {
-
-	function subetuwebwp_display_footer_widgets() {
-
-		// Return true by default
-		$return = true;
-
-		// Return false if disabled via Customizer
-		if ( true != get_theme_mod( 'subetuweb_footer_widgets', true ) ) {
-			$return = false;
-		}
-
-		// Apply filters and return
-		return apply_filters( 'subetuweb_display_footer_widgets', $return );
-
-	}
-}
-
-/**
  * Display footer bottom
  *
  * @since 1.1.2
@@ -3679,29 +2827,6 @@ if ( ! function_exists( 'subetuwebwp_display_footer_bottom' ) ) {
 }
 
 /**
- * Display scrool up button
- *
- * @since 1.5.0
- */
-if ( ! function_exists( 'subetuwebwp_display_scroll_up_button' ) ) {
-
-	function subetuwebwp_display_scroll_up_button() {
-
-		// Return true by default
-		$return = true;
-
-		// Return false if disabled via Customizer
-		if ( true != get_theme_mod( 'subetuweb_scroll_top', true ) ) {
-			$return = false;
-		}
-
-		// Apply filters and return
-		return apply_filters( 'subetuweb_display_scroll_up_button', $return );
-
-	}
-}
-
-/**
  * Footer template
  * I make a function to be able to remove it for the Beaver Themer plugin
  *
@@ -3711,8 +2836,7 @@ if ( ! function_exists( 'subetuwebwp_footer_template' ) ) {
 
 	function subetuwebwp_footer_template() {
 
-		if ( subetuwebwp_display_footer_widgets()
-			|| subetuwebwp_display_footer_bottom() ) {
+		if ( subetuwebwp_display_footer_bottom() ) {
 			get_template_part( 'partials/footer/layout' );
 		}
 
@@ -3760,82 +2884,8 @@ if ( ! function_exists( 'subetuwebwp_footer_classes' ) ) {
 /*
 -------------------------------------------------------------------------------*/
 /*
- [ WooCommerce ]
-/*-------------------------------------------------------------------------------*/
-
-/**
- * Checks if on the WooCommerce shop page.
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_is_woo_shop' ) ) {
-
-	function subetuwebwp_is_woo_shop() {
-		if ( ! subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-			return false;
-		} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
-			return true;
-		}
-	}
-}
-
-/**
- * Checks if on a WooCommerce tax.
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_is_woo_tax' ) ) {
-
-	function subetuwebwp_is_woo_tax() {
-		if ( ! subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-			return false;
-		} elseif ( ! is_tax() ) {
-			return false;
-		} elseif ( function_exists( 'is_product_taxonomy' ) ) {
-			if ( is_product_taxonomy() ) {
-				return true;
-			}
-		}
-	}
-}
-
-/**
- * Checks if on singular WooCommerce product post.
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_is_woo_single' ) ) {
-
-	function subetuwebwp_is_woo_single() {
-		if ( ! subetuwebWP_WOOCOMMERCE_ACTIVE ) {
-			return false;
-		} elseif ( is_woocommerce() && is_singular( 'product' ) ) {
-			return true;
-		}
-	}
-}
-
-/*
--------------------------------------------------------------------------------*/
-/*
  [ Other ]
 /*-------------------------------------------------------------------------------*/
-
-/**
- * Theme Branding
- *
- * @since 1.4.0
- */
-if ( ! function_exists( 'subetuwebwp_theme_branding' ) ) {
-
-	function subetuwebwp_theme_branding() {
-
-		$return = esc_html__( 'subetuwebWP', 'subetuwebwp' );
-
-		// Return and apply filters for child theming
-		return apply_filters( 'subetuweb_theme_branding', $return );
-	}
-}
 
 /**
  * Return padding/margin values for customizer
@@ -3959,12 +3009,8 @@ if ( ! function_exists( 'subetuwebwp_register_tm_strings' ) ) {
 				'subetuweb_mobile_menu_close_text'          => esc_html__( 'Close', 'subetuwebwp' ),
 				'subetuweb_mobile_menu_close_btn_text'      => esc_html__( 'Close Menu', 'subetuwebwp' ),
 				'subetuweb_footer_copyright_text'           => esc_html__( 'Copyright [subetuwebwp_date] - subetuwebWP Theme by subetuwebWP', 'subetuwebwp' ),
-				'subetuweb_woo_menu_icon_custom_link'       => '',
 				'subetuweb_blog_infinite_scroll_last_text'  => '',
 				'subetuweb_blog_infinite_scroll_error_text' => '',
-				'subetuweb_woo_off_canvas_filter_text'      => esc_html__( 'Filter', 'subetuwebwp' ),
-				'subetuweb_woo_infinite_scroll_last_text'   => '',
-				'subetuweb_woo_infinite_scroll_error_text'  => '',
 			)
 		);
 
@@ -4151,130 +3197,6 @@ if ( ! function_exists( 'subetuwebwp_minify_css' ) ) {
 }
 
 /**
- * Array of Font Awesome Icons for the scroll up button
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_get_scrolltotop_icons' ) ) {
-
-	function subetuwebwp_get_scrolltotop_icons( $return = 'up_arrows', $default = 'none' ) {
-
-		// Add none to top of array
-		$icons_array = array(
-			'none' => '',
-		);
-
-		// Define return icons
-		$return_icons = array();
-
-		// Returns up arrows only
-		if ( 'up_arrows' == $return ) {
-			$return_icons = array( 'chevron_up', 'caret_up', 'angle_up', 'double_arrows_up', 'long_arrow_alt_up', 'arrow_alt_circle_up', 'arrow_up', 'level_up_alt', 'caret_square_up' );
-			$return_icons = array_combine( $return_icons, $return_icons );
-		}
-
-		return apply_filters( 'subetuwebwp_get_scrolltotop_icons', array_merge( $icons_array, $return_icons ) );
-
-	}
-}
-
-/**
- * Array of Icons for the WooCommerce cart
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_get_cart_icons' ) ) {
-
-	function subetuwebwp_get_cart_icons( $default = 'icon_handbag' ) {
-
-		// Returns icons
-		$return_icons = array( 'icon_basket', 'icon_handbag', 'shopping_basket', 'shopping_bag', 'shopping_cart' );
-		$return_icons = array_combine( $return_icons, $return_icons );
-
-		return apply_filters( 'subetuweb_get_cart_icons', array_merge( $return_icons ) );
-	}
-}
-
-/**
- * Returns sidr menu source
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_sidr_menu_source' ) ) {
-
-	function subetuwebwp_sidr_menu_source() {
-
-		// Return if is not sidebar mobile style
-		if ( 'sidebar' != subetuwebwp_mobile_menu_style() ) {
-			return;
-		}
-
-		// Define array of items
-		$items = array();
-
-		// Add close button
-		if ( get_theme_mod( 'subetuweb_mobile_menu_close_btn', true ) ) {
-			$items['sidrclose'] = '#sidr-close';
-		}
-
-		// If has mobile menu
-		if ( has_nav_menu( 'mobile_menu' ) ) {
-			$items['mobile-nav'] = '#mobile-nav';
-		}
-
-		// Add main navigation
-		else {
-
-			// Navigation
-			$items['nav'] = '#site-navigation';
-
-			// Add top bar menu
-			if ( has_nav_menu( 'topbar_menu' ) ) {
-				$items['top-nav'] = '#top-bar-nav';
-			}
-		}
-
-		if ( 'full_screen' != subetuwebwp_header_style() ) {
-
-			// Add social menu
-			if ( true == get_theme_mod( 'subetuweb_menu_social', false )
-				&& get_theme_mod( 'subetuweb_menu_social_profiles' ) ) {
-				$items['social'] = '#site-header .subetuwebwp-social-menu';
-			}
-		}
-
-		// Add search form
-		if ( get_theme_mod( 'subetuweb_mobile_menu_search', true ) ) {
-			$items['search'] = '#mobile-menu-search';
-		}
-
-		// Apply filters for child theming
-		$items = apply_filters( 'subetuweb_mobile_menu_source', $items );
-
-		// Turn items into comma seperated list
-		$items = implode( ', ', $items );
-
-		// Return
-		return $items;
-
-	}
-}
-
-/**
- * Query Autoptimize activation - check required if using a page builder
- *
- * @since 1.1.1
- */
-if ( ! function_exists( 'subetuwebwp_is_autoptimize_activated' ) ) {
-
-	function subetuwebwp_is_autoptimize_activated() {
-
-		return class_exists( 'autoptimizeBase' ) ? true : false;
-
-	}
-}
-
-/**
  * Returns header template content
  *
  * @since 1.1.1
@@ -4303,39 +3225,6 @@ if ( ! function_exists( 'subetuwebwp_header_template_content' ) ) {
 
 		// Apply filters and return content
 		return apply_filters( 'subetuweb_header_template_content', $content );
-
-	}
-}
-
-/**
- * Returns social menu content
- *
- * @since 1.4.0
- */
-if ( ! function_exists( 'subetuwebwp_social_menu_content' ) ) {
-
-	function subetuwebwp_social_menu_content() {
-
-		// Get template ID from Customizer
-		$content = get_theme_mod( 'subetuweb_menu_social_template' );
-
-		// Get Polylang Translation of template
-		if ( function_exists( 'pll_get_post' ) ) {
-			$content = pll_get_post( $content, pll_current_language() );
-		}
-
-		// Get template content
-		if ( ! empty( $content ) ) {
-
-			$template = get_post( $content );
-
-			if ( $template && ! is_wp_error( $template ) ) {
-				$content = $template->post_content;
-			}
-		}
-
-		// Return content
-		return apply_filters( 'subetuwebwp_social_menu_content', $content );
 
 	}
 }
@@ -4430,45 +3319,6 @@ if ( ! function_exists( 'subetuwebwp_topbar_template_content' ) ) {
 }
 
 /**
- * Returns topbar social alt content
- *
- * @since 1.0.0
- */
-if ( ! function_exists( 'subetuwebwp_top_bar_social_alt_content' ) ) {
-
-	function subetuwebwp_top_bar_social_alt_content() {
-
-		// Get page ID from Customizer
-		$content = get_theme_mod( 'subetuweb_top_bar_social_alt' );
-
-		// Get the template ID
-		$template = get_theme_mod( 'subetuweb_top_bar_social_alt_template' );
-		if ( ! empty( $template ) ) {
-			$content = $template;
-		}
-
-		// Get Polylang Translation of template
-		if ( function_exists( 'pll_get_post' ) ) {
-			$content = pll_get_post( $content, pll_current_language() );
-		}
-
-		// Get page content
-		if ( ! empty( $content ) ) {
-
-			$template = get_post( $content );
-
-			if ( $template && ! is_wp_error( $template ) ) {
-				$content = $template->post_content;
-			}
-		}
-
-		// Return content
-		return apply_filters( 'subetuwebwp_top_bar_social_alt_content', $content );
-
-	}
-}
-
-/**
  * Return correct schema markup
  *
  * @since 1.2.10
@@ -4521,11 +3371,6 @@ if ( ! function_exists( 'subetuwebwp_get_schema_markup' ) ) {
 		elseif ( 'main' == $location ) {
 			$itemtype = 'https://schema.org/WebPageElement';
 			$itemprop = 'mainContentOfPage';
-		}
-
-		// Sidebar
-		elseif ( 'sidebar' == $location ) {
-			$schema = 'itemscope="itemscope" itemtype="https://schema.org/WPSideBar"';
 		}
 
 		// Footer widgets
@@ -4636,32 +3481,6 @@ if ( ! function_exists( 'subetuwebwp_error_page_template_content' ) ) {
 }
 
 /**
- * Default color picker palettes
- *
- * @since 1.4.9
- */
-if ( ! function_exists( 'subetuwebwp_default_color_palettes' ) ) {
-
-	function subetuwebwp_default_color_palettes() {
-
-		$palettes = array(
-			'#000000',
-			'#ffffff',
-			'#dd3333',
-			'#dd9933',
-			'#eeee22',
-			'#81d742',
-			'#1e73be',
-			'#8224e3',
-		);
-
-		// Apply filters and return
-		return apply_filters( 'subetuweb_default_color_palettes', $palettes );
-
-	}
-}
-
-/**
  * Create list of attributes into a string and apply filter baes on context
  *
  * @since 1.8.7
@@ -4716,133 +3535,26 @@ function owp_parse_attr( $context, $attributes = array(), $args = array() ) {
 	return apply_filters( "owp_attr_{$context}", $attributes, $context, $args );
 }
 
-/**
- * Search Icon
- *
- * Adds a search icon into the mobile header.
- *
- * @since 3.0.0
- */
-function subetuwebwp_mobile_search_icon() {
+function subetuwebwp_body_content() {
 
-	$class        = '';
-	$search_style = subetuwebwp_mobile_menu_search_style();
-	$search_style = $search_style ? $search_style : 'disabled';
-	$header_style = subetuwebwp_header_style();
-
-	if ( 'disabled' === $search_style || 'vertical' === $header_style ) {
-		return;
-	}
-
-	// Get correct search icon class.
-	if ( 'drop_down' == $search_style ) {
-		$class = 'dropdown';
-	} elseif ( 'overlay' == $search_style ) {
-		$class = 'overlay';
-	} else {
-		$class = '';
-	}
-
-	?>
-
-	<a href="#" class="search-icon-<?php echo esc_attr( $class ); ?>" aria-label="<?php subetuwebwp_theme_strings( 'owp-string-mobile-search', 'subetuwebwp' ); ?>"><?php subetuwebwp_icon( 'search' ); ?></a>
-
-	<?php
-}
-
-/**
- * Mobile Search Form
- *
- * @since 3.0.0
- */
-function subetuwebwp_mobile_search_form_html() {
-
-	$class        = '';
-	$search_style = subetuwebwp_mobile_menu_search_style();
-	$search_style = $search_style ? $search_style : 'disabled';
-	$header_style = subetuwebwp_header_style();
-	$post_type    = get_theme_mod( 'subetuweb_menu_search_source', 'any' );
-
-	if ( 'disabled' === $search_style || 'vertical' === $header_style ) {
-		return;
-	}
-
-	// Get correct search icon class
-	if ( 'drop_down' == $search_style ) {
-		$class = 'dropdown';
-	} elseif ( 'header_replace' == $search_style ) {
-		$class = 'overlay';
-	} elseif ( 'overlay' == $search_style ) {
-		$class = 'overlay';
-	} else {
-		$class = '';
-	}
-
-	if ( 'drop_down' === $search_style ) {
-		$mobile_search_content = '';
-		ob_start();
-		?>
-		<form role="search" method="get" class="mobile-searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-		<span class="screen-reader-text"><?php subetuwebwp_theme_strings( 'owp-string-search-form-label' ); ?></span>
-			<input aria-label="<?php subetuwebwp_theme_strings( 'owp-string-search-field' ); ?>" type="text" class="field" name="s" placeholder="<?php subetuwebwp_theme_strings( 'owp-string-search-text', 'subetuwebwp' ); ?>">
-			<?php
-			if ( 'any' !== $post_type ) {
-				?>
-				<input type="hidden" name="post_type" value="<?php echo esc_attr( $post_type ); ?>">
-				<?php
-			}
-			?>
-		</form>
-		<?php
-		$mobile_search_content .= ob_get_clean();
-	} elseif ( 'overlay' === $search_style ) {
-		$mobile_search_content = '';
-		ob_start();
-		?>
-		<div class="container clr">
-			<form role="search" method="get" class="mobile-searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<a href="#" class="search-overlay-close" aria-label="<?php subetuwebwp_theme_strings( 'owp-string-close-search-form' ); ?>"><span></span></a>
-				<span class="screen-reader-text"><?php subetuwebwp_theme_strings( 'owp-string-search-form-label' ); ?></span>
-				<input aria-label="<?php subetuwebwp_theme_strings( 'owp-string-mobile-submit-search' ); ?>" class="mobile-search-overlay-input" type="search" name="s" autocomplete="off" value="">
-				<?php
-				if ( 'any' !== $post_type ) {
-					?>
-					<input type="hidden" name="post_type" value="<?php echo esc_attr( $post_type ); ?>">
-					<?php
-				}
-				?>
-				<label><?php subetuwebwp_theme_strings( 'owp-string-search-overlay-search-text' ); ?><span aria-hidden="true"><i></i><i></i><i></i></span></label>
-			</form>
-		</div>
-		<?php
-		$mobile_search_content .= ob_get_clean();
-	}
-	?>
-
-	<div id="icon-searchform-<?php echo esc_attr( $class ); ?>" class="search-style-<?php echo esc_attr( $class ); ?>">
-		<?php echo $mobile_search_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-	</div>
-
-	<?php
-}
-
-/**
- * Display Mobile Search Icon in Header
- *
- * @since 3.0.0
- */
-function mobile_menu_search_icon() {
-
-	$search_style = subetuwebwp_mobile_menu_search_style();
-	$search_style = $search_style ? $search_style : 'disabled';
-	$header_style = subetuwebwp_header_style();
-
-	if ( 'disabled' === $search_style || 'vertical' === $header_style ) {
-		return;
-	}
-
-	add_action( 'subetuweb_after_mobile_icon', 'subetuwebwp_mobile_search_icon' );
-	add_action( 'subetuweb_mobile_menu_icon_after', 'subetuwebwp_mobile_search_form_html' );
+	get_template_part( 'content/single' );
 
 }
-add_action( 'wp', 'mobile_menu_search_icon' );
+
+add_action( 'subetuwebwp_body_content', 'subetuwebwp_body_content' );
+
+function subetuwebwp_blog_page() {
+
+	get_template_part( 'content/blog' );
+
+}
+
+add_action( 'subetuwebwp_blog_page', 'subetuwebwp_blog_page' );
+
+function subetuwebwp_portfolio_data() {
+
+	get_template_part( 'assets/epanel/portfolio' );
+
+}
+
+add_action( 'subetuwebwp_portfolio_data', 'subetuwebwp_portfolio_data' );

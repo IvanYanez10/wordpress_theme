@@ -25,16 +25,6 @@ if ( ! function_exists( 'subetuwebwp_theme_icons' ) ) {
 				'fai'  => 'fas fa-home',
 				'svg'  => 'homepage',
 			),
-			'search'                 => array(
-				'sili' => 'icon-magnifier',
-				'fai'  => 'fas fa-search',
-				'svg'  => 'search',
-			),
-			'user'                   => array(
-				'sili' => 'icon-user',
-				'fai'  => 'fas fa-user-circle',
-				'svg'  => 'author',
-			),
 			'date'                   => array(
 				'sili' => 'icon-clock',
 				'fai'  => 'far fa-calendar-alt',
